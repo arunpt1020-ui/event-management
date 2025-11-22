@@ -49,13 +49,14 @@ router.post(
 router.put(
   '/:id',
   protect,
-  checkOwnership(getEventService()),
+  // Pass the getter so ownership check uses the current service (mock or DB) at request time
+  checkOwnership(getEventService),
   upload.single('image'),
   eventValidation,
   updateEvent
 );
 
-router.delete('/:id', protect, checkOwnership(getEventService()), deleteEvent);
+router.delete('/:id', protect, checkOwnership(getEventService), deleteEvent);
 
 module.exports = router;
 

@@ -58,15 +58,36 @@ exports.getEvents = async (req, res) => {
 
     // Get events
     const Event = getEventService();
-    const events = await Event.find(query, {
-      populate: 'createdBy',
-      sort: { createdAt: -1 },
-      skip,
-      limit: Number(limit),
-    });
 
-    // Get total count
-    const total = await Event.countDocuments(query);
+    let events;
+    let total;
+
+    // If DB is connected, use Mongoose query chaining (populate/sort/skip/limit)
+    const { isDBConnected } = require('../utils/dataService');
+    if (isDBConnected()) {
+      events = await Event.find(query)
+        .populate('createdBy')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit));
+
+      // Get total count
+      total = await Event.countDocuments(query);
+    } else {
+      // Mock service expects (query, options)
+      events = await Event.find(query, {
+        populate: 'createdBy',
+        sort: { createdAt: -1 },
+        skip,
+        limit: Number(limit),
+      });
+
+      // Mock service provides countDocuments
+      total = await Event.countDocuments(query);
+    }
+
+    // Normalize events to plain objects (Mongoose documents have methods/internal fields)
+    events = events.map((ev) => (ev && typeof ev.toObject === 'function' ? ev.toObject() : ev));
 
     res.status(200).json({
       success: true,

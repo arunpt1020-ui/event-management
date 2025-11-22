@@ -74,6 +74,9 @@ exports.createRegistration = async (req, res) => {
       await registration.populate('eventId');
     }
 
+    // Normalize to plain object for response
+    const regObj = registration && typeof registration.toObject === 'function' ? registration.toObject() : registration;
+
     // Send confirmation email
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
@@ -90,7 +93,7 @@ exports.createRegistration = async (req, res) => {
     res.status(201).json({
       success: true,
       data: {
-        registration,
+        registration: regObj,
       },
     });
   } catch (error) {
@@ -108,10 +111,21 @@ exports.createRegistration = async (req, res) => {
 exports.getMyRegistrations = async (req, res) => {
   try {
     const Registration = getRegistrationService();
-    const registrations = await Registration.find(
-      { userId: req.user._id },
-      { populate: 'eventId', sort: { registrationDate: -1 } }
-    );
+    const { isDBConnected } = require('../utils/dataService');
+    let registrations;
+    if (isDBConnected()) {
+      registrations = await Registration.find({ userId: req.user._id })
+        .populate('eventId')
+        .sort({ registrationDate: -1 });
+    } else {
+      registrations = await Registration.find(
+        { userId: req.user._id },
+        { populate: 'eventId', sort: { registrationDate: -1 } }
+      );
+    }
+
+    // Normalize registrations to plain objects
+    registrations = registrations.map((r) => (r && typeof r.toObject === 'function' ? r.toObject() : r));
 
     res.status(200).json({
       success: true,
@@ -157,10 +171,20 @@ exports.getEventRegistrations = async (req, res) => {
       });
     }
 
-    const registrations = await Registration.find(
-      { eventId: eventId, status: 'confirmed' },
-      { populate: 'userId', sort: { registrationDate: -1 } }
-    );
+    const { isDBConnected } = require('../utils/dataService');
+    let registrations;
+    if (isDBConnected()) {
+      registrations = await Registration.find({ eventId: eventId, status: 'confirmed' })
+        .populate('userId')
+        .sort({ registrationDate: -1 });
+    } else {
+      registrations = await Registration.find(
+        { eventId: eventId, status: 'confirmed' },
+        { populate: 'userId', sort: { registrationDate: -1 } }
+      );
+    }
+
+    registrations = registrations.map((r) => (r && typeof r.toObject === 'function' ? r.toObject() : r));
 
     res.status(200).json({
       success: true,

@@ -77,8 +77,8 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     const User = getUserService();
 
-    // Check if user exists
-    const user = await User.findOne({ email });
+    // Check if user exists - include password (schema has password select: false)
+    const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({

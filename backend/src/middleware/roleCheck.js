@@ -17,21 +17,48 @@ exports.authorize = (...roles) => {
 exports.checkOwnership = (model, paramName = 'id') => {
   return async (req, res, next) => {
     try {
-      // Determine which service to use based on model name
+      // Determine which service to use. Support:
+      // - passing a Mongoose model (has modelName)
+      // - passing a mock service object (has findById)
+      // - passing a getter function (e.g. getEventService) which will be called per-request
       let service;
-      if (model.modelName === 'Event' || (typeof model === 'function' && model.name === 'Event')) {
-        service = getEventService();
-      } else if (model.modelName === 'Registration' || (typeof model === 'function' && model.name === 'Registration')) {
-        service = getRegistrationService();
-      } else if (model.modelName === 'User' || (typeof model === 'function' && model.name === 'User')) {
-        service = getUserService();
-      } else {
-        service = model; // Fallback to original model
+
+      // If caller passed a getter function, call it to obtain the current service
+      if (typeof model === 'function') {
+        try {
+          service = model();
+        } catch (e) {
+          service = null;
+        }
       }
-      
+
+      // If that didn't yield a service, check if model itself looks like a Mongoose model or service
+      if (!service) {
+        if (model && model.modelName) {
+          service = model;
+        } else if (model && typeof model === 'object' && typeof model.findById === 'function') {
+          service = model;
+        }
+      }
+
+      // As a fallback, attempt to resolve by known getters based on model name string
+      if (!service) {
+        // try mapping known model names to getters
+        if (model && model === 'Event') service = getEventService();
+        else if (model && model === 'Registration') service = getRegistrationService();
+        else if (model && model === 'User') service = getUserService();
+      }
+
+      if (!service) {
+        return res.status(500).json({ success: false, message: 'Server error: service unavailable' });
+      }
+
       const resource = await service.findById(req.params[paramName]);
 
       if (!resource) {
+        // Helpful debug logging to understand which service/ID was used
+        const serviceType = service && service.modelName ? `model:${service.modelName}` : (service && service.find ? 'mock-service' : 'unknown-service');
+        console.warn(`Resource not found — service=${serviceType}, param=${paramName}, id=${req.params[paramName]}`);
         return res.status(404).json({
           success: false,
           message: 'Resource not found',

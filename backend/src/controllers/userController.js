@@ -25,7 +25,9 @@ exports.getUsers = async (req, res) => {
     const User = getUserService();
 
     let users = await User.find(query);
-    
+
+    // If using real Mongoose models, convert documents to plain objects
+    users = users.map((u) => (u && typeof u.toObject === 'function' ? u.toObject() : u));
     // Filter by search if provided
     if (search) {
       const searchLower = search.toLowerCase();
@@ -41,7 +43,7 @@ exports.getUsers = async (req, res) => {
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       .slice(skip, skip + Number(limit))
       .map((u) => {
-        const { password, ...userWithoutPassword } = u;
+        const { password, __v, ...userWithoutPassword } = u;
         return userWithoutPassword;
       });
 
@@ -74,7 +76,7 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const User = getUserService();
-    const user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({
@@ -82,8 +84,10 @@ exports.getUser = async (req, res) => {
         message: 'User not found',
       });
     }
+    // Convert to plain object if it's a Mongoose document
+    user = user && typeof user.toObject === 'function' ? user.toObject() : user;
 
-    const { password, ...userWithoutPassword } = user;
+    const { password, __v, ...userWithoutPassword } = user;
     res.status(200).json({
       success: true,
       data: {
