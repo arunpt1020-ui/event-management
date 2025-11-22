@@ -1,0 +1,47 @@
+[
+  {
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Site Administrator",
+    "email": "admin@example.com",
+    "password": "$2a$10$uObjVnmvHpeXNNwNZfuXeeH9QxywEMZwohWH03V6jFayiRZeA4uX6",
+    "role": "siteAdmin",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439012",
+    "name": "Artist User",
+    "email": "artist@example.com",
+    "password": "$2a$10$VRrcYZMoiFKsrnX.2q1G5.TO61.SMtlxScdgcwpNen8t6g0BPGZFq",
+    "role": "artist",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439013",
+    "name": "Regular User",
+    "email": "user@example.com",
+    "password": "$2a$10$MezGT8EcottXv0GMy4Dy/eaP4dFjGN/ffjt8ZqiT8NDC1UKwq06SW",
+    "role": "user",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439014",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "$2a$10$rOzJqKqKqKqKqKqKqKqKqOqKqKqKqKqKqKqKqKqKqKqKqKqKqKq",
+    "role": "user",
+    "createdAt": "2024-01-16T10:00:00.000Z",
+    "updatedAt": "2024-01-16T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439015",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "password": "$2a$10$rOzJqKqKqKqKqKqKqKqKqOqKqKqKqKqKqKqKqKqKqKqKqKqKq",
+    "role": "artist",
+    "createdAt": "2024-01-17T10:00:00.000Z",
+    "updatedAt": "2024-01-17T10:00:00.000Z"
+  }
+]

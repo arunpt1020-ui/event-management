@@ -1,0 +1,43 @@
+[
+  {
+    "_id": "507f1f77bcf86cd799439021",
+    "userId": "507f1f77bcf86cd799439013",
+    "eventId": "507f191e810c19729de860ea",
+    "registrationDate": "2024-02-01T10:00:00.000Z",
+    "status": "confirmed",
+    "paymentStatus": "paid",
+    "createdAt": "2024-02-01T10:00:00.000Z",
+    "updatedAt": "2024-02-01T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439022",
+    "userId": "507f1f77bcf86cd799439014",
+    "eventId": "507f191e810c19729de860ea",
+    "registrationDate": "2024-02-02T10:00:00.000Z",
+    "status": "confirmed",
+    "paymentStatus": "paid",
+    "createdAt": "2024-02-02T10:00:00.000Z",
+    "updatedAt": "2024-02-02T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439023",
+    "userId": "507f1f77bcf86cd799439013",
+    "eventId": "507f191e810c19729de860eb",
+    "registrationDate": "2024-02-03T10:00:00.000Z",
+    "status": "confirmed",
+    "paymentStatus": "pending",
+    "createdAt": "2024-02-03T10:00:00.000Z",
+    "updatedAt": "2024-02-03T10:00:00.000Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439024",
+    "userId": "507f1f77bcf86cd799439014",
+    "eventId": "507f191e810c19729de860ec",
+    "registrationDate": "2024-02-04T10:00:00.000Z",
+    "status": "confirmed",
+    "paymentStatus": "paid",
+    "createdAt": "2024-02-04T10:00:00.000Z",
+    "updatedAt": "2024-02-04T10:00:00.000Z"
+  }
+]
+
