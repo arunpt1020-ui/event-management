@@ -56,9 +56,9 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <li className="nav-item">
-                  <span className="navbar-text me-3">
+                  <Link className="navbar-text nav-link me-3 text-white" to="/profile">
                     Welcome, {user?.name} ({user?.role})
-                  </span>
+                  </Link>
                 </li>
                 <li className="nav-item">
                   <button className="btn btn-outline-light" onClick={handleLogout}>

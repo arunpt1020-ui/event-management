@@ -5,8 +5,10 @@ const {
   register,
   login,
   getMe,
+    updateProfile,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
+  const upload = require('../utils/upload');
 
 // Validation rules
 const registerValidation = [
@@ -29,6 +31,11 @@ const loginValidation = [
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
 router.get('/me', protect, getMe);
+  // Update own profile (allow images)
+  router.put('/me', protect, upload.fields([
+    { name: 'profileImage', maxCount: 1 },
+    { name: 'coverImage', maxCount: 1 },
+  ]), updateProfile);
 
 module.exports = router;
 

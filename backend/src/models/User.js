@@ -38,6 +38,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  profileImage: {
+    type: String,
+    default: '',
+  },
+  coverImage: {
+    type: String,
+    default: '',
+  },
 });
 
 // Hash password before saving

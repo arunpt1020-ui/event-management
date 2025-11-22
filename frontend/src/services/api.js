@@ -43,6 +43,30 @@ export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
   getMe: () => api.get('/auth/me'),
+  updateProfile: (data) => {
+    // Supports multipart/form-data when files are present
+    const hasFile = Object.values(data || {}).some((v) => v instanceof File || (Array.isArray(v) && v[0] instanceof File));
+    if (!hasFile) {
+      return api.put('/auth/me', data);
+    }
+
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      const val = data[key];
+      if (val === undefined || val === null) return;
+      if (Array.isArray(val)) {
+        val.forEach((item) => formData.append(key, item));
+      } else {
+        formData.append(key, val);
+      }
+    });
+
+    return api.put('/auth/me', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 };
 
 // Events API

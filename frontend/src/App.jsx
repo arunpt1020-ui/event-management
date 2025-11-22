@@ -16,6 +16,7 @@ import CreateEvent from './pages/CreateEvent';
 import EditEvent from './pages/EditEvent';
 import Dashboard from './pages/Dashboard';
 import UserManagement from './pages/UserManagement';
+import Profile from './pages/Profile';
 import { ROLES } from './utils/constants';
 
 function App() {
@@ -59,6 +60,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={[ROLES.SITE_ADMIN]}>
                   <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
